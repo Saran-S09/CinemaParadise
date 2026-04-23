@@ -40,15 +40,40 @@ async function loadMovie() {
     music ? music.name : "N/A";
 
   // TRAILER
-  const vidRes = await fetch(`${BASE}/movie/${movieId}/videos?api_key=${API_KEY}`);
-  const vidData = await vidRes.json();
+  // 🎥 VIDEOS (SMART SELECTION)
+const vidRes = await fetch(`${BASE}/movie/${movieId}/videos?api_key=${API_KEY}`);
+const vidData = await vidRes.json();
 
-  const video = vidData.results.find(v => v.type === "Trailer");
+const trailerFrame = document.getElementById("trailer");
 
-  if (video) {
-    document.getElementById("trailer").src =
-      `https://www.youtube.com/embed/${video.key}?autoplay=1&mute=1`;
-  }
+// ✅ Only YouTube videos
+const videos = vidData.results?.filter(v => v.site === "YouTube") || [];
+
+// 🔥 PRIORITY ORDER
+let video =
+  videos.find(v => v.type === "Trailer" && v.official) ||   // best
+  videos.find(v => v.type === "Trailer") ||
+  videos.find(v => v.type === "Teaser" && v.official) ||
+  videos.find(v => v.type === "Teaser") ||
+  videos.find(v => v.type === "Clip" || v.type === "Featurette") ||
+  videos[0]; // fallback
+
+// 🎬 SHOW VIDEO
+if (video && video.key) {
+  trailerFrame.src =
+    `https://www.youtube.com/embed/${video.key}?autoplay=1&mute=1&rel=0`;
+} else {
+  trailerFrame.style.display = "none";
+
+  const right = document.querySelector(".right");
+
+  right.innerHTML += `
+    <p style="margin-top:20px;">No trailer available</p>
+    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(data.title + ' trailer')}" target="_blank">
+      ▶ Watch on YouTube
+    </a>
+  `;
+}
 }
 
 loadMovie();

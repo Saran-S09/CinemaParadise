@@ -1,51 +1,90 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title> Film Roll 🎬</title>
+  <title>Film Roll 🎬</title>
   <link rel="stylesheet" href="style.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+
 <body>
 
+<!-- ================= NAVBAR ================= -->
 <header class="navbar">
-  <div class="logo">🎬 Film Roll </div>
+  <div class="logo">🎬 Film Roll</div>
 
   <div class="nav-right">
-    <input type="text" id="search" placeholder="Search movies..." />
-    <button id="searchBtn">🔍</button>
-  </div>
+  <input type="text" id="search" placeholder="Search movies..." />
+
+  <button id="searchBtn" class="btn search-btn">
+    🔍 <span>Search</span>
+  </button>
+  <button id="tvBtn" class="btn">📺 TV Shows</button>
+  <button id="homeBtn" class="btn home-btn">
+    🏠 <span>Home</span>
+  </button>
+</div>
 </header>
 
-<!-- HERO -->
+<!-- ================= HERO ================= -->
 <div class="hero">
 
   <!-- SLIDER -->
   <div class="hero-slider" id="heroSlider"></div>
 
+  <!-- DARK OVERLAY -->
+  <div class="hero-dark"></div>
+
   <!-- CONTENT -->
-  <div class="hero-overlay">
-    <div class="hero-content">
-      <h1 id="heroTitle"></h1>
-      <p id="heroDesc"></p>
-      <button id="heroBtn">▶ Watch Now</button>
-    </div>
+  <div class="hero-content">
+    <h1 id="heroTitle"></h1>
+    <p id="heroDesc"></p>
+    <button id="heroBtn">▶ Watch Now</button>
   </div>
 
 </div>
-<!-- GLOBAL -->
-<h2>🔥 Trending</h2>
-<div id="trending" class="row"></div>
 
-<h2>⭐ Popular</h2>
-<div id="popular" class="row"></div>
+<!-- ================= HOME SECTION ================= -->
+<section id="homeSection">
 
-<!-- TAMIL SECTIONS -->
-<h2>🎬 Tamil Recent</h2>
-<div id="tamilRecent" class="row"></div>
+  <h2>🔥 Trending</h2>
+  <div id="trending" class="row"></div>
 
-<h2>🇮🇳 Tamil Popular</h2>
-<div id="tamilPopular" class="row"></div>
+  <h2>⭐ Popular</h2>
+  <div id="popular" class="row"></div>
 
+  <h2>🎬 Tamil Recent</h2>
+  <div id="tamilRecent" class="row"></div>
+
+  <h2>🇮🇳 Tamil Popular</h2>
+  <div id="tamilPopular" class="row"></div>
+
+</section>
+
+<!-- TV SHOWS SECTION -->
+
+<section id="tvSection" style="display:none;">
+
+  <h2>📺 Trending TV Shows</h2>
+  <div id="tvTrending" class="row"></div>
+
+  <h2>🔥 Popular TV Shows</h2>
+  <div id="tvPopular" class="row"></div>
+
+  <h2>📺 Tamil TV Series</h2>
+  <div id="tamilTV" class="row"></div>
+  
+</section>
+
+<!-- ================= SEARCH SECTION ================= -->
+<section id="searchSection" style="display:none;">
+
+  <h2>🔍 Search Results</h2>
+  <div id="searchResults" class="row"></div>
+
+</section>
+
+<!-- ================= SCRIPT ================= -->
 <script src="app.js"></script>
+
 </body>
 </html>

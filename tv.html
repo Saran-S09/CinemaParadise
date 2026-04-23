@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TV Show Details</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<button onclick="goBack()" class="back-btn">⬅ Back</button>
+
+<div class="details-container">
+
+  <!-- LEFT -->
+  <div class="details-left">
+    <img id="poster" class="poster">
+  </div>
+
+  <!-- RIGHT -->
+  <div class="details-right">
+    <h1 id="title"></h1>
+    <p id="rating"></p>
+    <p id="overview"></p>
+  </div>
+
+</div>
+
+<!-- 🎬 TRAILER -->
+<div class="full-section">
+  <h2>🎬 Trailer</h2>
+  <div class="trailer-box">
+    <iframe id="trailer" allowfullscreen></iframe>
+  </div>
+</div>
+
+<!-- 📺 SEASONS -->
+<div class="full-section">
+  <h2>📺 Seasons</h2>
+  <div id="seasonList" class="season-row"></div>
+</div>
+
+<!-- SEASON DETAILS -->
+<div id="seasonDetails"></div>
+
+<script src="tv.js"></script>
+</body>
+</html>
