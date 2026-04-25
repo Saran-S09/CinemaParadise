@@ -1361,3 +1361,123 @@ img {
     max-width: 140px;
   }
 }
+
+/* =========================
+   TV / MOVIE DETAILS FIX
+========================= */
+
+.details-container {
+  display: flex;
+  gap: 50px;
+  padding: 50px;
+  max-width: 1400px;
+  margin: auto;
+  align-items: flex-start;
+}
+
+/* LEFT (POSTER) */
+.details-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+/* RIGHT (TEXT) */
+.details-right {
+  flex: 2;
+}
+
+/* =========================
+   TRAILER BELOW (CENTERED)
+========================= */
+
+.full-section {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 0 40px;
+}
+
+.trailer-box {
+  width: 100%;
+  max-width: 800px;
+  height: 420px;
+  margin: auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* =========================
+   SEASONS ROW
+========================= */
+
+.season-row {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.season-row .movie {
+  min-width: 150px;
+}
+
+/* =========================
+   TABLET VIEW
+========================= */
+
+@media (max-width: 900px) {
+
+  .details-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .poster {
+    max-width: 240px;
+  }
+
+  .details-right {
+    width: 100%;
+  }
+
+  .trailer-box {
+    height: 260px;
+  }
+
+  .full-section {
+    padding: 0 20px;
+  }
+}
+
+/* =========================
+   MOBILE VIEW
+========================= */
+
+@media (max-width: 600px) {
+
+  .details-container {
+    padding: 20px 15px;
+  }
+
+  .poster {
+    max-width: 200px;   /* 👈 still bigger but fits mobile */
+  }
+
+  .details-right h1 {
+    font-size: 20px;
+  }
+
+  .details-right p {
+    font-size: 13px;
+  }
+
+  .trailer-box {
+    height: 200px;
+  }
+
+  .season-row .movie {
+    min-width: 120px;
+  }
+}
