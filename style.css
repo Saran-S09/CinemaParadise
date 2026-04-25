@@ -1481,3 +1481,155 @@ img {
     min-width: 120px;
   }
 }
+
+/* =========================================
+   📺 TV DETAILS PAGE – MOBILE PERFECT FIT
+========================================= */
+
+/* DEFAULT (DESKTOP CLEANUP) */
+.details-container {
+  display: flex;
+  gap: 50px;
+  padding: 50px;
+  max-width: 1200px;
+  margin: auto;
+  align-items: flex-start;
+}
+
+.details-left {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.details-right {
+  flex: 2;
+}
+
+/* POSTER BALANCE */
+.poster {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  border-radius: 12px;
+}
+
+/* TRAILER */
+.trailer-box {
+  width: 100%;
+  max-width: 800px;
+  height: 420px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* SEASONS */
+.season-row {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+/* =========================================
+   📱 TABLET (≤ 900px)
+========================================= */
+@media (max-width: 900px) {
+
+  .details-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px 20px;
+  }
+
+  .poster {
+    max-width: 230px;
+  }
+
+  .details-right {
+    width: 100%;
+  }
+
+  .trailer-box {
+    height: 260px;
+  }
+}
+
+/* =========================================
+   📱 MOBILE (≤ 600px)
+========================================= */
+@media (max-width: 600px) {
+
+  /* STACK EVERYTHING */
+  .details-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 15px;
+    gap: 20px;
+  }
+
+  /* POSTER PERFECT SIZE */
+  .poster {
+    max-width: 190px;
+  }
+
+  /* TEXT READABILITY */
+  .details-right h1 {
+    font-size: 20px;
+    line-height: 1.3;
+  }
+
+  .details-right p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* TRAILER FULL WIDTH */
+  .trailer-box {
+    width: 100%;
+    height: 200px;
+  }
+
+  /* SEASONS SCROLL */
+  .season-row {
+    gap: 10px;
+    padding: 0 5px;
+  }
+
+  .season-row .movie {
+    min-width: 110px;
+  }
+
+  /* SECTION PADDING */
+  .full-section {
+    padding: 0 15px;
+  }
+
+  /* BACK BUTTON FIX */
+  .back-btn {
+    margin: 10px;
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* =========================================
+   📱 EXTRA SMALL (≤ 400px)
+========================================= */
+@media (max-width: 400px) {
+
+  .poster {
+    max-width: 160px;
+  }
+
+  .trailer-box {
+    height: 180px;
+  }
+
+  .details-right h1 {
+    font-size: 18px;
+  }
+}
