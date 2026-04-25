@@ -2,21 +2,19 @@
 <html>
 <head>
   <title>TV Show Details</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=2">
 </head>
 <body>
 
 <button onclick="goBack()" class="back-btn">⬅ Back</button>
 
-<div class="details-container">
+<div class="movie-container">
 
-  <!-- LEFT -->
-  <div class="details-left">
+  <div class="left">
     <img id="poster" class="poster">
   </div>
 
-  <!-- RIGHT -->
-  <div class="details-right">
+  <div class="right">
     <h1 id="title"></h1>
     <p id="rating"></p>
     <p id="overview"></p>
@@ -25,11 +23,18 @@
 </div>
 
 <!-- 🎬 TRAILER -->
+<!-- 🎬 TRAILER -->
 <div class="full-section">
   <h2>🎬 Trailer</h2>
+
+  <!-- 🔽 ADD THIS DROPDOWN -->
+  <select id="trailerSelect" class="trailer-select"></select>
+
+  <!-- 🎥 VIDEO -->
   <div class="trailer-box">
     <iframe id="trailer" allowfullscreen></iframe>
   </div>
+
 </div>
 
 <!-- 📺 SEASONS -->

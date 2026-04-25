@@ -5,6 +5,14 @@ const IMG = "https://image.tmdb.org/t/p/w500";
 const params = new URLSearchParams(window.location.search);
 const movieId = params.get("id");
 
+const LANGUAGES = [
+  { code: "en-US", label: "English" },
+  { code: "ta-IN", label: "Tamil" },
+  { code: "hi-IN", label: "Hindi" },
+  { code: "te-IN", label: "Telugu" },
+  { code: "ml-IN", label: "Malayalam" }
+];
+
 // BACK
 function goBack() {
   window.history.back();
@@ -44,32 +52,74 @@ async function loadMovie() {
 const vidRes = await fetch(`${BASE}/movie/${movieId}/videos?api_key=${API_KEY}`);
 const vidData = await vidRes.json();
 
+// =====================
+// 🎬 MULTI LANGUAGE TRAILERS
+// =====================
+
 const trailerFrame = document.getElementById("trailer");
+const trailerSelect = document.getElementById("trailerSelect");
 
-// ✅ Only YouTube videos
-const videos = vidData.results?.filter(v => v.site === "YouTube") || [];
+let allVideos = [];
 
-// 🔥 PRIORITY ORDER
-let video =
-  videos.find(v => v.type === "Trailer" && v.official) ||   // best
-  videos.find(v => v.type === "Trailer") ||
-  videos.find(v => v.type === "Teaser" && v.official) ||
-  videos.find(v => v.type === "Teaser") ||
-  videos.find(v => v.type === "Clip" || v.type === "Featurette") ||
-  videos[0]; // fallback
+// 🔥 fetch videos for each language
+for (let lang of LANGUAGES) {
 
-// 🎬 SHOW VIDEO
-if (video && video.key) {
-  trailerFrame.src =
-    `https://www.youtube.com/embed/${video.key}?autoplay=1&mute=1&rel=0`;
+  const res = await fetch(
+    `${BASE}/movie/${movieId}/videos?api_key=${API_KEY}&language=${lang.code}`
+  );
+
+  const data = await res.json();
+
+  const videos = data.results
+    .filter(v => v.site === "YouTube")
+    .map(v => ({
+      key: v.key,
+      name: v.name,
+      lang: lang.label
+    }));
+
+  allVideos.push(...videos);
+}
+
+console.log("MOVIE MULTI LANG VIDEOS:", allVideos);
+
+// 🎬 render dropdown
+if (allVideos.length > 0) {
+
+  trailerSelect.innerHTML = "";
+
+  allVideos.forEach((v, i) => {
+
+    const opt = document.createElement("option");
+    opt.value = v.key;
+    opt.textContent = `${v.lang} - ${v.name}`;
+
+    trailerSelect.appendChild(opt);
+
+    // first video load
+    if (i === 0) {
+      trailerFrame.src =
+        `https://www.youtube.com/embed/${v.key}?rel=0`;
+    }
+  });
+
+  // change video
+  trailerSelect.onchange = (e) => {
+    trailerFrame.src =
+      `https://www.youtube.com/embed/${e.target.value}?rel=0`;
+  };
+
 } else {
+
   trailerFrame.style.display = "none";
 
   const right = document.querySelector(".right");
 
   right.innerHTML += `
     <p style="margin-top:20px;">No trailer available</p>
-    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(data.title + ' trailer')}" target="_blank">
+    <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(
+      document.getElementById("title").innerText + " trailer"
+    )}" target="_blank">
       ▶ Watch on YouTube
     </a>
   `;
