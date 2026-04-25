@@ -1096,11 +1096,6 @@ h2 {
     font-size: 12px;
   }
 
-  /* DETAILS PAGE */
-  .details-container {
-    padding: 20px 15px;
-  }
-
   .poster {
     max-width: 170px;
   }
@@ -1170,14 +1165,6 @@ img {
 
   .hero-content h1 {
     font-size: 26px;
-  }
-
-  /* MOVIE DETAILS */
-  .details-container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    gap: 25px;
   }
 
   .details-left,
@@ -1286,9 +1273,6 @@ img {
   }
 
   /* ===== DETAILS PAGE ===== */
-  .details-container {
-    padding: 15px;
-  }
 
   .poster {
     max-width: 160px;
@@ -1363,31 +1347,6 @@ img {
 }
 
 /* =========================
-   TV / MOVIE DETAILS FIX
-========================= */
-
-.details-container {
-  display: flex;
-  gap: 50px;
-  padding: 50px;
-  max-width: 1400px;
-  margin: auto;
-  align-items: flex-start;
-}
-
-/* LEFT (POSTER) */
-.details-left {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-/* RIGHT (TEXT) */
-.details-right {
-  flex: 2;
-}
-
-/* =========================
    TRAILER BELOW (CENTERED)
 ========================= */
 
@@ -1404,21 +1363,6 @@ img {
   margin: auto;
   border-radius: 10px;
   overflow: hidden;
-}
-
-/* =========================
-   SEASONS ROW
-========================= */
-
-.season-row {
-  display: flex;
-  gap: 15px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-}
-
-.season-row .movie {
-  min-width: 150px;
 }
 
 /* =========================
@@ -1451,60 +1395,9 @@ img {
   }
 }
 
-/* =========================
-   MOBILE VIEW
-========================= */
-
-@media (max-width: 600px) {
-
-  .details-container {
-    padding: 20px 15px;
-  }
-
-  .poster {
-    max-width: 200px;   /* 👈 still bigger but fits mobile */
-  }
-
-  .details-right h1 {
-    font-size: 20px;
-  }
-
-  .details-right p {
-    font-size: 13px;
-  }
-
-  .trailer-box {
-    height: 200px;
-  }
-
-  .season-row .movie {
-    min-width: 120px;
-  }
-}
-
 /* =========================================
    📺 TV DETAILS PAGE – MOBILE PERFECT FIT
 ========================================= */
-
-/* DEFAULT (DESKTOP CLEANUP) */
-.details-container {
-  display: flex;
-  gap: 50px;
-  padding: 50px;
-  max-width: 1200px;
-  margin: auto;
-  align-items: flex-start;
-}
-
-.details-left {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-}
-
-.details-right {
-  flex: 2;
-}
 
 /* POSTER BALANCE */
 .poster {
@@ -1752,4 +1645,462 @@ img {
   color: white;
   border: 1px solid #444;
   border-radius: 6px;
+}
+
+/* =========================
+   🎬 TV / MOVIE CONTAINER FIX
+========================= */
+
+.movie-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+  align-items: flex-start;
+}
+
+/* LEFT SIDE (POSTER) */
+.movie-container .left {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* POSTER */
+.poster {
+  width: 100%;
+  max-width: 260px;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+/* RIGHT SIDE */
+.movie-container .right {
+  flex: 1;
+}
+
+.movie-container .right h1 {
+  font-size: 32px;
+  margin-bottom: 10px;
+}
+
+.movie-container .right p {
+  color: #ccc;
+  line-height: 1.6;
+  margin-bottom: 8px;
+}
+
+/* =========================
+   🎥 TRAILER SECTION
+========================= */
+
+.trailer-box {
+  width: 100%;
+  max-width: 800px;
+  height: 420px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.trailer-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* =========================
+   📺 TABLET RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+
+  .movie-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+  }
+
+  .movie-container .right {
+    width: 100%;
+  }
+
+  .poster {
+    max-width: 220px;
+  }
+
+  .trailer-box {
+    height: 280px;
+  }
+}
+
+/* =========================
+   📱 MOBILE RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+  .movie-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .movie-container .right h1 {
+    font-size: 20px;
+  }
+
+  .movie-container .right p {
+    font-size: 13px;
+  }
+
+  .poster {
+    max-width: 180px;
+  }
+
+  .trailer-box {
+    height: 200px;
+  }
+
+  .full-section {
+    padding: 0 15px;
+  }
+}
+
+/* =========================
+   📱 EXTRA SMALL
+========================= */
+
+@media (max-width: 400px) {
+
+  .poster {
+    max-width: 150px;
+  }
+
+  .trailer-box {
+    height: 180px;
+  }
+}
+
+.movie-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+  align-items: flex-start;
+}
+
+/* LEFT */
+.movie-container .left {
+  flex: 0 0 auto;
+}
+
+/* RIGHT */
+.movie-container .right {
+  flex: 1;
+}
+
+/* POSTER */
+.poster {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+
+@media (max-width: 900px) {
+
+  .movie-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+  }
+
+  .poster {
+    max-width: 220px;
+  }
+
+  .trailer-box {
+    height: 280px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .movie-container {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .movie-container .right h1 {
+    font-size: 20px;
+  }
+
+  .movie-container .right p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* 🔥 BUTTON / SELECT FIX */
+  .trailer-select {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  /* 🔥 TRAILER SMALL MOBILE */
+  .trailer-box {
+    height: 200px;
+    width: 100%;
+  }
+
+  /* 🔥 SEASONS SCROLL BETTER */
+  .season-row {
+    gap: 10px;
+    padding-left: 5px;
+  }
+
+  .season-row .movie {
+    min-width: 120px;
+  }
+}
+
+.movie-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+  align-items: flex-start;
+}
+
+/* LEFT */
+.movie-container .left {
+  flex: 0 0 auto;
+}
+
+/* RIGHT */
+.movie-container .right {
+  flex: 1;
+}
+
+/* POSTER */
+.poster {
+  width: 100%;
+  max-width: 260px;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+}
+
+.trailer-box {
+  width: 100%;
+  max-width: 800px;
+  height: 420px;
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.trailer-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* dropdown */
+.trailer-select {
+  width: 100%;
+  max-width: 320px;
+  padding: 8px;
+  margin: 10px 0;
+  background: #111;
+  color: white;
+  border: 1px solid #333;
+  border-radius: 6px;
+}
+
+.season-row {
+  display: flex;
+  gap: 15px;
+  overflow-x: auto;
+  padding: 10px 0;
+  scroll-snap-type: x mandatory;
+}
+
+.season-row .movie {
+  min-width: 140px;
+  scroll-snap-align: start;
+}
+
+.season-row .movie img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+@media (max-width: 900px) {
+
+  .movie-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 25px;
+  }
+
+  .poster {
+    max-width: 220px;
+  }
+
+  .trailer-box {
+    height: 280px;
+  }
+}
+
+@media (max-width: 600px) {
+
+  .movie-container {
+    padding: 15px;
+    gap: 20px;
+  }
+
+  .movie-container .right h1 {
+    font-size: 20px;
+  }
+
+  .movie-container .right p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* trailer */
+  .trailer-box {
+    height: 200px;
+  }
+
+  /* dropdown */
+  .trailer-select {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  /* seasons */
+  .season-row {
+    gap: 10px;
+    padding-left: 5px;
+  }
+
+  .season-row .movie {
+    min-width: 120px;
+  }
+}
+
+.back-btn {
+  margin: 20px;
+  padding: 10px 16px;
+  background: #7c3aed;
+  border: none;
+  color: white;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+/* hover effect */
+.back-btn:hover {
+  background: #5b21b6;
+  transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+
+  .back-btn {
+    margin: 15px;
+    padding: 12px 18px;   /* 👈 bigger tap area */
+    font-size: 16px;      /* 👈 more readable */
+    border-radius: 10px;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .back-btn {
+    width: fit-content;
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+}
+
+/* =========================
+   CLEAN RECTANGLE BUTTON SYSTEM
+   NO OVERRIDES NEEDED
+========================= */
+
+/* SEARCH INPUT */
+.nav-right input {
+  padding: 8px 12px;
+  border-radius: 3px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+
+/* BASE BUTTON */
+.nav-right .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+
+  padding: 8px 14px;
+  font-size: 14px;
+
+  border-radius: 3px;   /* rectangle */
+  border: 1px solid #444;
+
+  background: #1a1a1a;
+  color: white;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* HOME BUTTON */
+.nav-right .home-btn {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+/* SEARCH BUTTON */
+.nav-right .search-btn {
+  background: transparent;
+  color: #e50914;
+  border: 1px solid #e50914;
+}
+
+/* HOVER */
+.nav-right .btn:hover {
+  background: #222;
+  transform: translateY(-1px);
+}
+
+/* SEARCH HOVER */
+.nav-right .search-btn:hover {
+  background: #e50914;
+  color: white;
+}
+
+/* CLICK EFFECT */
+.nav-right .btn:active {
+  transform: scale(0.97);
 }
