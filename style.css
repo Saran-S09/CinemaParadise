@@ -1633,3 +1633,171 @@ img {
     font-size: 18px;
   }
 }
+
+/* =========================================
+   📱 MOBILE POSTER IMPROVEMENT (SAFE)
+========================================= */
+
+@media (max-width: 600px) {
+
+  /* 🔥 HOME PAGE MOVIES */
+  .row {
+    gap: 12px;
+  }
+
+  .movie {
+    min-width: 135px;   /* 👈 bigger but still scrollable */
+  }
+
+  .movie img {
+    height: 200px;      /* 👈 taller poster */
+    object-fit: cover;
+  }
+
+  .movie p {
+    font-size: 12px;
+  }
+
+  /* 🔥 TV SHOWS (SEASONS ROW) */
+  .season-row .movie {
+    min-width: 125px;
+  }
+
+  .season-row .movie img {
+    height: 180px;
+  }
+
+  /* 🔥 DETAILS PAGE POSTER */
+  .poster {
+    max-width: 220px;   /* 👈 bigger but fits center */
+  }
+
+  /* 🔥 DETAILS ALIGNMENT */
+  .details-container {
+    align-items: center;
+    text-align: center;
+  }
+
+  /* 🔥 TRAILER FIT */
+  .trailer-box {
+    height: 200px;
+    width: 100%;
+  }
+}
+
+
+/* EXTRA SMALL DEVICES */
+@media (max-width: 400px) {
+
+  .movie {
+    min-width: 115px;
+  }
+
+  .movie img {
+    height: 170px;
+  }
+
+  .season-row .movie {
+    min-width: 110px;
+  }
+
+  .poster {
+    max-width: 190px;
+  }
+
+  .trailer-box {
+    height: 180px;
+  }
+}
+
+/* =========================
+   TV DETAILS ALIGN FIX
+========================= */
+
+.details-container {
+  display: flex;
+  gap: 40px;
+  padding: 40px;
+  max-width: 1200px;
+  margin: auto;
+  align-items: flex-start;
+}
+
+/* LEFT SIDE (POSTER) */
+.details-left {
+  flex: 0 0 auto;
+}
+
+/* 🔥 IMPORTANT: LEFT ALIGN */
+.poster {
+  display: block;
+  margin: 0;              /* removes center alignment */
+  max-width: 280px;       /* good size */
+}
+
+/* RIGHT SIDE */
+.details-right {
+  flex: 1;
+}
+
+@media (max-width: 600px) {
+
+  /* STACK BUT KEEP LEFT FEEL */
+  .details-container {
+    flex-direction: column;
+    align-items: flex-start;   /* 🔥 not center */
+    padding: 20px 15px;
+    gap: 20px;
+  }
+
+  /* POSTER LEFT (NOT CENTER) */
+  .details-left {
+    width: 100%;
+  }
+
+  .poster {
+    max-width: 200px;
+  }
+
+  /* TEXT ALIGN LEFT */
+  .details-right {
+    width: 100%;
+  }
+
+  .details-right h1 {
+    font-size: 20px;
+    text-align: left;
+  }
+
+  .details-right p {
+    font-size: 13px;
+    text-align: left;
+  }
+
+  /* TRAILER FULL WIDTH */
+  .trailer-box {
+    width: 100%;
+    height: 200px;
+  }
+
+  /* SEASONS ROW */
+  .season-row {
+    gap: 10px;
+    padding-left: 5px;
+  }
+
+  .season-row .movie {
+    min-width: 120px;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .poster {
+    max-width: 180px;
+  }
+
+  .trailer-box {
+    height: 180px;
+  }
+}
