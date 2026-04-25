@@ -929,3 +929,202 @@ h2 {
   border-radius: 12px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.6);
 }
+
+/* =========================
+   FINAL RESPONSIVE LAYER
+   (SAFE – NO BREAKING)
+========================= */
+
+/* LARGE TABLETS */
+@media (max-width: 1024px) {
+
+  .details-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 30px;
+  }
+
+  .details-left,
+  .details-right {
+    width: 100%;
+  }
+
+  .poster {
+    max-width: 220px;
+  }
+
+  .trailer-box {
+    max-width: 100%;
+    height: 280px;
+  }
+
+  .hero-content {
+    max-width: 80%;
+  }
+
+  .hero-content h1 {
+    font-size: 28px;
+  }
+}
+
+
+/* TABLET */
+@media (max-width: 768px) {
+
+  /* NAVBAR */
+  .navbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px 20px;
+  }
+
+  .nav-right {
+    width: 100%;
+  }
+
+  .nav-right input {
+    width: 100%;
+  }
+
+  /* HERO */
+  .hero {
+    height: 55vh;
+  }
+
+  .hero-content {
+    padding: 20px;
+    left: 20px;
+    bottom: 20px;
+  }
+
+  .hero-content h1 {
+    font-size: 22px;
+  }
+
+  .hero-content p {
+    font-size: 13px;
+  }
+
+  /* MOVIE ROW */
+  .movie {
+    min-width: 130px;
+  }
+
+  .movie img {
+    height: 200px;
+  }
+
+  /* TRAILER */
+  .trailer-box {
+    height: 240px;
+  }
+
+  /* SECTION SPACING */
+  .full-section {
+    padding: 0 20px;
+  }
+
+  #seasonDetails {
+    padding: 0 20px;
+  }
+}
+
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+  /* NAVBAR CLEAN */
+  .navbar {
+    padding: 10px 15px;
+  }
+
+  .logo {
+    font-size: 18px;
+  }
+
+  .nav-right {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .nav-right input {
+    width: 100%;
+    font-size: 14px;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* HERO */
+  .hero {
+    height: 50vh;
+  }
+
+  .hero-content {
+    left: 15px;
+    bottom: 15px;
+    max-width: 90%;
+  }
+
+  .hero-content h1 {
+    font-size: 18px;
+  }
+
+  .hero-content p {
+    font-size: 12px;
+  }
+
+  .hero-content button {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  /* MOVIE CARDS */
+  .movie {
+    min-width: 110px;
+  }
+
+  .movie img {
+    height: 160px;
+  }
+
+  .movie p {
+    font-size: 12px;
+  }
+
+  /* DETAILS PAGE */
+  .details-container {
+    padding: 20px 15px;
+  }
+
+  .poster {
+    max-width: 170px;
+  }
+
+  .details-right h1 {
+    font-size: 20px;
+  }
+
+  .details-right p {
+    font-size: 13px;
+  }
+
+  /* TRAILER */
+  .trailer-box {
+    height: 200px;
+  }
+
+  /* SEASONS */
+  .season-row .movie {
+    min-width: 120px;
+  }
+
+  /* EPISODES */
+  .episode-grid {
+    grid-template-columns: 1fr;
+  }
+}
