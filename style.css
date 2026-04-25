@@ -1885,3 +1885,184 @@ img {
     min-width: 120px;
   }
 }
+
+/* =========================
+   🔘 BUTTON SYSTEM (CLEAN)
+========================= */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+
+  padding: 8px 14px;
+
+  font-size: 14px;
+  font-weight: 500;
+
+  border-radius: 4px; /* 👈 rectangle */
+  border: 1px solid #333;
+
+  background: transparent;
+  color: white;
+
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+/* DARK BUTTON (HOME + TV) */
+.btn-dark {
+  background: #1a1a1a;
+  border: 1px solid #333;
+}
+
+.btn-dark:hover {
+  background: #2a2a2a;
+  border-color: #555;
+}
+
+/* ACCENT BUTTON (SEARCH) */
+.btn-accent {
+  border: 1px solid #e50914;
+  color: #e50914;
+}
+
+.btn-accent:hover {
+  background: #e50914;
+  color: white;
+}
+
+/* INPUT FIX */
+.nav-right input {
+  padding: 8px 12px;
+  border-radius: 2px;
+  border: 1px solid #333;
+  background: #111;
+  color: white;
+  outline: none;
+}
+
+/* HOVER MICRO INTERACTION */
+.btn:hover {
+  transform: translateY(-1px);
+}
+
+/* =========================
+   📱 MOBILE
+========================= */
+@media (max-width: 600px) {
+
+  .nav-right {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .nav-right input {
+    width: 100%;
+  }
+
+  .btn {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+
+  .btn span {
+    display: none; /* 👈 only icons on mobile */
+  }
+}
+
+/* 🔥 FORCE RECTANGLE BUTTONS */
+.nav-right button,
+.btn,
+#searchBtn,
+#homeBtn,
+#tvBtn {
+  border-radius: 3px !important;
+}
+.nav-right button:hover,
+.btn:hover,
+#searchBtn:hover,
+#homeBtn:hover,
+#tvBtn :hover {
+  transform: scale(1.05) !important;
+  background-color: #570c83;
+}
+
+/* =========================================
+   📺 TV DETAILS PAGE – FINAL MOBILE FIX
+========================================= */
+
+@media screen and (max-width: 600px) {
+
+  /* MAIN LAYOUT */
+  .details-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    padding: 15px !important;
+    gap: 15px !important;
+  }
+
+  /* POSTER LEFT */
+  .details-left {
+    width: 100% !important;
+  }
+
+  .poster {
+    width: 180px !important;   /* 👈 perfect mobile size */
+    max-width: 180px !important;
+    margin: 0 !important;
+  }
+
+  /* TEXT */
+  .details-right {
+    width: 100% !important;
+  }
+
+  .details-right h1 {
+    font-size: 20px !important;
+    text-align: left !important;
+  }
+
+  .details-right p {
+    font-size: 13px !important;
+    text-align: left !important;
+  }
+
+  /* TRAILER */
+  .full-section {
+    padding: 0 15px !important;
+  }
+
+  .trailer-box {
+    width: 100% !important;
+    height: 200px !important;
+    margin: 0 !important;
+  }
+
+  .trailer-box iframe {
+    width: 100% !important;
+    height: 100% !important;
+  }
+
+  /* SEASONS ROW */
+  .season-row {
+    display: flex !important;
+    overflow-x: auto !important;
+    gap: 10px !important;
+    padding-left: 5px !important;
+  }
+
+  .season-row .movie {
+    min-width: 110px !important;
+  }
+
+  .season-row img {
+    height: 160px !important;
+  }
+
+  /* REMOVE EXTRA SPACING */
+  #seasonDetails {
+    padding: 0 15px !important;
+  }
+}
