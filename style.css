@@ -2717,3 +2717,105 @@ img {
     height: 180px !important;
   }
 }
+
+/* =========================
+   📺 TV DETAILS FINAL CLEAN FIX
+   (THIS WILL OVERRIDE EVERYTHING)
+========================= */
+
+.movie-container {
+  display: flex !important;
+  gap: 30px !important;
+  padding: 30px !important;
+  max-width: 1100px !important;
+  margin: auto !important;
+  align-items: flex-start !important;
+}
+
+.movie-container .left {
+  flex: 0 0 auto !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+.movie-container .poster {
+  width: 240px !important;
+  max-width: 240px !important;
+  height: auto !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5) !important;
+}
+
+.movie-container .right {
+  flex: 1 !important;
+}
+
+.movie-container .right h1 {
+  font-size: 28px !important;
+  margin-bottom: 10px !important;
+}
+
+.movie-container .right p {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: #ccc !important;
+}
+
+/* TRAILER */
+.trailer-box {
+  width: 100% !important;
+  max-width: 800px !important;
+  height: 400px !important;
+  margin: 20px auto !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+}
+
+.trailer-box iframe {
+  width: 100% !important;
+  height: 100% !important;
+  border: none !important;
+}
+
+/* =========================
+   📱 MOBILE FIX (FORCE APPLY)
+========================= */
+
+@media (max-width: 768px) {
+
+  .movie-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+    padding: 20px !important;
+  }
+
+  .movie-container .poster {
+    width: 190px !important;
+    max-width: 190px !important;
+  }
+
+  .movie-container .right h1 {
+    font-size: 20px !important;
+  }
+
+  .movie-container .right p {
+    font-size: 14px !important;
+    text-align: center !important;
+  }
+
+  .trailer-box {
+    height: 210px !important;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .movie-container .poster {
+    width: 160px !important;
+  }
+
+  .trailer-box {
+    height: 180px !important;
+  }
+}
