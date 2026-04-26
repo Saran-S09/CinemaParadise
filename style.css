@@ -2451,10 +2451,18 @@ img {
   }
 
   /* 🔥 DESCRIPTION SLIGHTLY BIGGER */
+  /* =========================
+   🎬 DESCRIPTION TEXT BOOST
+   (MOBILE ONLY)
+========================= */
+
+@media (max-width: 768px) {
+
   .overview {
-    font-size: 15px;    /* slightly increased */
-    line-height: 1.8;
+    font-size: 18px;   /* increased from 14–15px */
+    line-height: 1.9;  /* better readability */
   }
+}
 
   /* KEEP EVERYTHING ELSE SAME */
 }
