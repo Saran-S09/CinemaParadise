@@ -2618,10 +2618,11 @@ img {
 
 
 /* =========================
-   TV PAGE CLEAN FIX (SCOPED)
+   🎬 TV / MOVIE DETAILS FINAL MOBILE FIX
+   (FORCE OVERRIDE CLEAN VERSION)
 ========================= */
 
-.tv-page .movie-container {
+.movie-container {
   display: flex;
   gap: 30px;
   padding: 30px;
@@ -2630,43 +2631,89 @@ img {
   align-items: flex-start;
 }
 
-.tv-page .poster {
-  width: 260px;
+/* LEFT */
+.movie-container .left {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: center;
+}
+
+/* POSTER */
+.movie-container .poster {
+  width: 240px;
+  max-width: 240px;
   border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.5);
 }
 
-.tv-page .right h1 {
+/* RIGHT */
+.movie-container .right {
+  flex: 1;
+}
+
+.movie-container .right h1 {
   font-size: 28px;
+  margin-bottom: 10px;
 }
 
-.tv-page #overview {
-  font-size: 15px;
-  line-height: 1.7;
+.movie-container .right p {
   color: #ccc;
-  max-width: 550px;
+  line-height: 1.6;
 }
 
-/* MOBILE FIX */
+/* TRAILER */
+.trailer-box {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  margin: 20px auto;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.trailer-box iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* =========================
+   📱 MOBILE FIX (IMPORTANT)
+========================= */
+
 @media (max-width: 768px) {
 
-  .tv-page .movie-container {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 15px;
+  .movie-container {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
   }
 
-  .tv-page .poster {
-    width: 180px;
+  .movie-container .poster {
+    width: 190px !important;
+    max-width: 190px !important;
   }
 
-  .tv-page #overview {
-    font-size: 15px;
-    max-width: 100%;
-    text-align: left;
+  .movie-container .right h1 {
+    font-size: 20px !important;
   }
 
-  .tv-page .right h1 {
-    font-size: 20px;
+  .movie-container .right p {
+    font-size: 14px !important;
+  }
+
+  .trailer-box {
+    height: 210px !important;
+  }
+}
+
+@media (max-width: 400px) {
+
+  .movie-container .poster {
+    width: 160px !important;
+  }
+
+  .trailer-box {
+    height: 180px !important;
   }
 }
