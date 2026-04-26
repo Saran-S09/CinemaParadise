@@ -2254,59 +2254,56 @@ img {
 
 
 /* =========================
-   🎬 MOVIE DESCRIPTION FIX
-   PROFESSIONAL OTT STYLE ALIGNMENT
+   🎬 MOVIE DESCRIPTION
+   BALANCED OTT STYLE LAYOUT
 ========================= */
 
 @media (max-width: 768px) {
 
-  /* RIGHT SECTION LAYOUT */
   .right {
     width: 100%;
-    padding: 0 16px;
+    padding: 0 18px;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  /* TITLE */
   .right h1 {
     font-size: 20px;
     text-align: center;
     margin-bottom: 6px;
   }
 
-  /* RATING */
   .rating {
     text-align: center;
     font-size: 14px;
     margin-bottom: 10px;
   }
 
-  /* =========================
-     DESCRIPTION (MAIN FIX)
-  ========================= */
-
+  /* 🔥 MAIN BALANCED DESCRIPTION */
   .overview {
-    font-size: 13px;
-    line-height: 1.7;
-    color: #ccc;
+    font-size: 13.5px;
+    line-height: 1.75;
+    color: #ddd;
 
-    /* 🔥 KEY FIX: readable width */
-    max-width: 500px;
+    /* 🔥 KEY FIX: balanced width */
     width: 100%;
+    max-width: 520px;
 
-    /* 🔥 ALIGNMENT */
+    /* equal visual balance */
+    margin: 14px auto;
+
+    /* left text but controlled box */
     text-align: left;
 
-    /* center block but text left */
-    margin: 12px auto;
+    /* spacing like OTT apps */
+    padding: 0 8px;
 
-    /* spacing improvement */
-    padding: 0 5px;
-
-    /* better paragraph flow */
-    word-spacing: 1px;
+    /* better paragraph feel */
     letter-spacing: 0.2px;
+    word-spacing: 1px;
+
+    /* makes text feel evenly filled */
+    text-align-last: left;
   }
 }
