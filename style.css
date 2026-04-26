@@ -2366,7 +2366,7 @@ img {
   ========================= */
 
   .overview {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.7;
     color: #ccc;
 
@@ -2434,4 +2434,27 @@ img {
   iframe {
     height: 180px;
   }
+}
+
+
+/* =========================
+   🎬 MOVIE DETAILS
+   SMALL SIZE BOOST (SAFE)
+========================= */
+
+@media (max-width: 768px) {
+
+  /* 🔥 POSTER SLIGHTLY BIGGER */
+  .poster {
+    max-width: 200px;   /* was ~170–180px range */
+    width: 200px;
+  }
+
+  /* 🔥 DESCRIPTION SLIGHTLY BIGGER */
+  .overview {
+    font-size: 15px;    /* slightly increased */
+    line-height: 1.8;
+  }
+
+  /* KEEP EVERYTHING ELSE SAME */
 }
