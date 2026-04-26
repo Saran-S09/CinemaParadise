@@ -2194,3 +2194,60 @@ img {
     border-radius: 6px;
   }
 }
+
+
+/* =========================
+   📱 MOVIE DESCRIPTION FIX
+   CLEAN MOBILE ALIGNMENT
+========================= */
+
+@media (max-width: 768px) {
+
+  /* RIGHT PANEL TEXT ALIGNMENT */
+  .right {
+    width: 100%;
+    padding: 0 15px;
+    text-align: center;   /* 🔥 makes clean mobile look */
+  }
+
+  /* TITLE */
+  .right h1 {
+    font-size: 20px;
+    margin-bottom: 6px;
+    text-align: center;
+  }
+
+  /* RATING */
+  .rating {
+    font-size: 14px;
+    margin-bottom: 10px;
+    text-align: center;
+  }
+
+  /* FIXED DESCRIPTION BOX */
+  .overview {
+    font-size: 13px;
+    line-height: 1.6;
+
+    color: #ccc;
+
+    /* 🔥 IMPORTANT: controlled width */
+    max-width: 90%;
+    margin: 12px auto;   /* centers the text block */
+
+    text-align: center;
+
+    /* clean spacing */
+    padding: 0 5px;
+  }
+}
+
+
+@media (max-width: 400px) {
+
+  .overview {
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 95%;
+  }
+}
