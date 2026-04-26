@@ -2041,10 +2041,10 @@ img {
 
 /* =========================
    CLEAN RECTANGLE BUTTON SYSTEM
-   NO OVERRIDES NEEDED
+   FINAL FIX (NO OVAL SHAPE)
 ========================= */
 
-/* SEARCH INPUT */
+/* INPUT */
 .nav-right input {
   padding: 8px 12px;
   border-radius: 3px;
@@ -2065,7 +2065,7 @@ img {
   padding: 8px 14px;
   font-size: 14px;
 
-  border-radius: 3px;   /* rectangle */
+  border-radius: 3px; /* 🔥 RECTANGLE FIX */
   border: 1px solid #444;
 
   background: #1a1a1a;
@@ -2079,6 +2079,7 @@ img {
 .nav-right .home-btn {
   background: #1a1a1a;
   border: 1px solid #333;
+  border-radius: 3px; /* FORCE RECTANGLE */
 }
 
 /* SEARCH BUTTON */
@@ -2086,6 +2087,7 @@ img {
   background: transparent;
   color: #e50914;
   border: 1px solid #e50914;
+  border-radius: 3px; /* FORCE RECTANGLE */
 }
 
 /* HOVER */
@@ -2100,7 +2102,95 @@ img {
   color: white;
 }
 
-/* CLICK EFFECT */
+/* ACTIVE CLICK */
 .nav-right .btn:active {
   transform: scale(0.97);
+}
+
+
+/* =========================
+   📱 MOVIE DETAILS PAGE ONLY
+   CLEAN MOBILE RESPONSIVE UI
+========================= */
+
+@media (max-width: 768px) {
+
+  /* MAIN LAYOUT */
+  .movie-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 15px;
+    gap: 18px;
+  }
+
+  /* LEFT SIDE (POSTER) */
+  .left {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  /* POSTER FIX (IMPORTANT) */
+  .poster {
+    width: 150px;          /* 🔥 small clean poster */
+    max-width: 150px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+  }
+
+  /* RIGHT SIDE */
+  .right {
+    width: 100%;
+    padding: 0 10px;
+  }
+
+  /* TITLE */
+  .right h1 {
+    font-size: 20px;
+    margin-bottom: 6px;
+  }
+
+  /* RATING */
+  .rating {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
+
+  /* DESCRIPTION */
+  .overview {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #ccc;
+    margin-top: 10px;
+  }
+
+  /* TRAILER TITLE */
+  .trailer-title {
+    font-size: 16px;
+    margin-top: 15px;
+  }
+
+  /* DROPDOWN */
+  .trailer-select {
+    width: 100%;
+    font-size: 13px;
+    padding: 8px;
+  }
+
+  /* TRAILER VIDEO */
+  iframe {
+    width: 100%;
+    height: 200px;
+    border-radius: 8px;
+  }
+
+  /* BACK BUTTON (BIG & EASY TOUCH) */
+  .back-btn {
+    margin: 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 6px;
+  }
 }
