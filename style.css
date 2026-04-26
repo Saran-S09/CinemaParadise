@@ -2450,19 +2450,25 @@ img {
     width: 200px;
   }
 
-  /* 🔥 DESCRIPTION SLIGHTLY BIGGER */
-  /* =========================
-   🎬 DESCRIPTION TEXT BOOST
-   (MOBILE ONLY)
+
+/* =========================
+   🎬 OVERRIDE ALL OLD STYLES
+   DESCRIPTION TEXT (MOBILE)
 ========================= */
 
 @media (max-width: 768px) {
 
   .overview {
-    font-size: 18px;   /* increased from 14–15px */
-    line-height: 1.9;  /* better readability */
+    font-size: 16px !important;   /* FORCE APPLY */
+    line-height: 1.9 !important;
+    color: #ddd !important;
+
+    max-width: 100% !important;
+    margin: 12px 0 !important;
+    padding: 0 8px !important;
+
+    text-align: left !important;
+    letter-spacing: 0.2px !important;
   }
 }
-
-  /* KEEP EVERYTHING ELSE SAME */
 }
