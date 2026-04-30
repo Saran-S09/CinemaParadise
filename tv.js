@@ -39,9 +39,26 @@ async function loadTV() {
       data.poster_path ? IMG + data.poster_path : "";
 
     document.getElementById("title").innerText = data.name || "No Title";
-    document.getElementById("rating").innerText = "⭐ " + data.vote_average;
+    document.getElementById("rating").innerText = "⭐ " + (data.vote_average ? data.vote_average.toFixed(1) : "N/A");
     document.getElementById("overview").innerText =
       data.overview || "No description";
+
+    // GENRES
+    const genresEl = document.getElementById("genres");
+    if (genresEl && data.genres) {
+      genresEl.innerHTML = data.genres.map(g => `<span>${g.name}</span>`).join("");
+    }
+
+    // META ROW
+    const metaEl = document.getElementById("meta");
+    if (metaEl) {
+      const parts = [];
+      if (data.first_air_date) parts.push(`<span>📅 ${data.first_air_date.split("-")[0]}</span>`);
+      if (data.number_of_seasons) parts.push(`<span>📺 ${data.number_of_seasons} Season${data.number_of_seasons > 1 ? "s" : ""}</span>`);
+      if (data.number_of_episodes) parts.push(`<span>🎬 ${data.number_of_episodes} Episodes</span>`);
+      if (data.status) parts.push(`<span>● ${data.status}</span>`);
+      metaEl.innerHTML = parts.join("");
+    }
 
     // =====================
     // 🎬 TRAILER FIX
