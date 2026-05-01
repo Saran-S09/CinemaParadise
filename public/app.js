@@ -1,5 +1,4 @@
-const API_KEY = "0ad6526135eb6a510c0d21afee0d557e";
-const BASE = "https://api.themoviedb.org/3";
+const BASE = "/api/tmdb";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 let heroMovies = [];
@@ -30,22 +29,22 @@ function loadHome() {
   showHome();
 
   
-  fetchMovies(`${BASE}/trending/movie/week?api_key=${API_KEY}`, "trending");
+  fetchMovies(`${BASE}/trending/movie/week`, "trending");
 
-  fetchMovies(`${BASE}/movie/popular?api_key=${API_KEY}`, "popular");
+  fetchMovies(`${BASE}/movie/popular`, "popular");
 
   fetchMovies(
-    `${BASE}/discover/movie?api_key=${API_KEY}&with_original_language=ta&sort_by=release_date.desc`,
+    `${BASE}/discover/movie?with_original_language=ta&sort_by=release_date.desc`,
     "tamilRecent"
   );
 
   fetchMovies(
-    `${BASE}/discover/movie?api_key=${API_KEY}&with_original_language=ta&sort_by=popularity.desc`,
+    `${BASE}/discover/movie?with_original_language=ta&sort_by=popularity.desc`,
     "tamilPopular"
   );
   // 🇮🇳 Tamil TV Series
   fetchTV(
-    `${BASE}/discover/tv?api_key=${API_KEY}&with_original_language=ta&sort_by=popularity.desc`,
+    `${BASE}/discover/tv?with_original_language=ta&sort_by=popularity.desc`,
     "tamilTV"
   );
   loadHero();
@@ -89,8 +88,8 @@ function showTV() {
 }
 
 function loadTV() {
-  fetchTV(`${BASE}/trending/tv/week?api_key=${API_KEY}`, "tvTrending");
-  fetchTV(`${BASE}/tv/popular?api_key=${API_KEY}`, "tvPopular");
+  fetchTV(`${BASE}/trending/tv/week`, "tvTrending");
+  fetchTV(`${BASE}/tv/popular`, "tvPopular");
 }
 
 
@@ -163,7 +162,7 @@ function openTV(id) {
 // ===============================
 async function loadHero() {
   try {
-    const res = await fetch(`${BASE}/trending/movie/week?api_key=${API_KEY}&include_adult=false`);
+    const res = await fetch(`${BASE}/trending/movie/week?include_adult=false`);
     const data = await res.json();
 
     const slider = document.getElementById("heroSlider");
@@ -237,7 +236,7 @@ function searchMovies() {
   document.getElementById("searchSection").style.display = "block";
 
   fetchMovies(
-    `${BASE}/search/movie?api_key=${API_KEY}&query=${q}&include_adult=false`,
+    `${BASE}/search/movie?query=${q}&include_adult=false`,
     "searchResults"
   );
 }

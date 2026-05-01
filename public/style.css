@@ -2743,3 +2743,155 @@ img {
   gap: 4px;
 }
 
+
+/* =============================================
+   🏠 HOME PAGE — SECTION SPACING FIX
+   (Prevents headings hiding behind sticky navbar)
+============================================= */
+
+section {
+  padding: 20px 40px;
+}
+
+section h2,
+.full-section h2 {
+  scroll-margin-top: 80px;
+}
+
+
+/* =============================================
+   🎬 MOVIE DETAIL — CREW INFO
+============================================= */
+
+.crew-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 28px;
+  margin: 14px 0;
+}
+
+.crew-info p {
+  font-size: 14px;
+  color: #bbb;
+  margin: 0;
+}
+
+.crew-info p b {
+  color: #e0e0e0;
+  font-weight: 600;
+}
+
+
+/* =============================================
+   🎬 NO TRAILER FALLBACK
+============================================= */
+
+.no-trailer-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 30px;
+  margin-top: 15px;
+  background: rgba(255,255,255,0.03);
+  border: 1px dashed rgba(255,255,255,0.1);
+  border-radius: 12px;
+  text-align: center;
+}
+
+.no-trailer-box p {
+  color: #888;
+  font-size: 15px;
+  margin: 0;
+}
+
+.yt-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 22px;
+  background: linear-gradient(135deg, #e50914, #b91c1c);
+  color: #fff;
+  text-decoration: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.25s ease;
+  box-shadow: 0 2px 10px rgba(229, 9, 20, 0.25);
+}
+
+.yt-link-btn:hover {
+  background: linear-gradient(135deg, #ff1a2d, #e50914);
+  box-shadow: 0 4px 18px rgba(229, 9, 20, 0.4);
+  transform: translateY(-1px);
+}
+
+
+/* =============================================
+   📱 MOVIE DETAIL — MOBILE FIX
+============================================= */
+
+@media (max-width: 768px) {
+
+  .details-container {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 16px;
+    gap: 20px;
+  }
+
+  .details-left {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .poster {
+    width: 200px;
+    max-width: 200px;
+  }
+
+  .details-right {
+    width: 100%;
+  }
+
+  .details-right h1 {
+    font-size: 22px;
+  }
+
+  .tv-genres {
+    justify-content: center;
+  }
+
+  .tv-meta-row {
+    justify-content: center;
+  }
+
+  .crew-info {
+    justify-content: center;
+  }
+
+  .overview {
+    text-align: left;
+    max-width: 520px;
+    margin: 12px auto;
+  }
+}
+
+@media (max-width: 600px) {
+
+  section {
+    padding: 15px 15px;
+  }
+
+  .poster {
+    width: 170px;
+    max-width: 170px;
+  }
+
+  .details-right h1 {
+    font-size: 20px;
+  }
+}
+

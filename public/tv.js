@@ -1,5 +1,4 @@
-const API_KEY = "0ad6526135eb6a510c0d21afee0d557e";
-const BASE = "https://api.themoviedb.org/3";
+const BASE = "/api/tmdb";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 const params = new URLSearchParams(window.location.search);
@@ -32,7 +31,7 @@ async function loadTV() {
     // =====================
     // TV DETAILS
     // =====================
-    const res = await fetch(`${BASE}/tv/${tvId}?api_key=${API_KEY}`);
+    const res = await fetch(`${BASE}/tv/${tvId}`);
     const data = await res.json();
 
     document.getElementById("poster").src =
@@ -63,7 +62,7 @@ async function loadTV() {
     // =====================
     // 🎬 TRAILER FIX
     // =====================
-    const vidRes = await fetch(`${BASE}/tv/${tvId}/videos?api_key=${API_KEY}`);
+    const vidRes = await fetch(`${BASE}/tv/${tvId}/videos`);
     const vidData = await vidRes.json();
 
 // =====================
@@ -87,7 +86,7 @@ function getPriority(type) {
 for (let lang of LANGUAGES) {
 
   const res = await fetch(
-    `${BASE}/tv/${tvId}/videos?api_key=${API_KEY}&language=${lang.code}`
+    `${BASE}/tv/${tvId}/videos?language=${lang.code}`
   );
 
   const data = await res.json();
@@ -196,7 +195,7 @@ if (allVideos.length > 0) {
 async function loadSeason(seasonNumber) {
 
   const res = await fetch(
-    `${BASE}/tv/${tvId}/season/${seasonNumber}?api_key=${API_KEY}`
+    `${BASE}/tv/${tvId}/season/${seasonNumber}`
   );
   const data = await res.json();
 
