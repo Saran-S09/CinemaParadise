@@ -1,6 +1,6 @@
 // Dynamically set BASE URL: if running locally on a different port (like Live Server 5500) or file://, point to Express proxy
 const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
-const BASE = "/api/tmdb";
+const BASE = (isLocal && window.location.port !== "3000") ? "http://localhost:3000/api/tmdb" : "/api/tmdb";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 let heroMovies = [];
