@@ -87,8 +87,13 @@ app.use("/api/tmdb", async (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`🎬 Film Roll server running at http://localhost:${PORT}`);
-  console.log(`🔒 API key is hidden from frontend`);
-});
+// Start server (Only if running locally, Vercel handles this automatically)
+if (process.env.NODE_ENV !== "production" && !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`🎬 Film Roll server running at http://localhost:${PORT}`);
+    console.log(`🔒 API key is hidden from frontend`);
+  });
+}
+
+// Export the app for Vercel Serverless
+module.exports = app;
