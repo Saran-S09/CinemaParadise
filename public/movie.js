@@ -1,4 +1,6 @@
-const BASE = "/api/tmdb";
+// Dynamically set BASE URL: if running locally on a different port (like Live Server 5500) or file://, point to Express proxy
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
+const BASE = (isLocal && window.location.port !== "3000") ? "http://localhost:3000/api/tmdb" : "/api/tmdb";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 const params = new URLSearchParams(window.location.search);
@@ -12,6 +14,21 @@ const LANGUAGES = [
   { code: "ml-IN", label: "Malayalam" }
 ];
 
+// HELPER: FETCH WITH RETRY
+async function fetchWithRetry(url, retries = 3, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return res;
+      console.warn(`⚠️ Fetch attempt ${i + 1} failed for ${url}. Status: ${res.status}`);
+    } catch (err) {
+      console.warn(`⚠️ Fetch attempt ${i + 1} error for ${url}: ${err.message}`);
+    }
+    if (i < retries - 1) await new Promise(r => setTimeout(r, delay));
+  }
+  return fetch(url);
+}
+
 // BACK
 function goBack() {
   window.history.back();
@@ -21,7 +38,7 @@ function goBack() {
 async function loadMovie() {
   try {
     console.log(`🎬 Loading movie details for ID: ${movieId}`);
-    const res = await fetch(`${BASE}/movie/${movieId}`);
+    const res = await fetchWithRetry(`${BASE}/movie/${movieId}`);
     
     if (!res.ok) {
       console.error(`❌ Movie Details error (${res.status}): ${res.statusText}`);
@@ -62,7 +79,7 @@ async function loadMovie() {
     }
 
     // CREDITS
-    const credRes = await fetch(`${BASE}/movie/${movieId}/credits`);
+    const credRes = await fetchWithRetry(`${BASE}/movie/${movieId}/credits`);
     const credData = await credRes.json();
 
     const director = credData.crew.find(p => p.job === "Director");
@@ -87,7 +104,7 @@ async function loadMovie() {
     // fetch videos for each language in parallel
     const videoPromises = LANGUAGES.map(async (lang) => {
       try {
-        const res = await fetch(`${BASE}/movie/${movieId}/videos?language=${lang.code}`);
+        const res = await fetchWithRetry(`${BASE}/movie/${movieId}/videos?language=${lang.code}`);
         const data = await res.json();
         
         return (data.results || [])

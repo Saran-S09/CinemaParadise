@@ -13,6 +13,19 @@ if (!TMDB_KEY) {
   process.exit(1);
 }
 
+// =====================
+// 🩺 HEALTH CHECK
+// =====================
+app.get("/api/health", (req, res) => {
+  console.log("🩺 Health check requested");
+  res.json({ 
+    status: "ok", 
+    timestamp: new Date().toISOString(),
+    apiKeyPresent: !!TMDB_KEY,
+    apiKeyPrefix: TMDB_KEY ? TMDB_KEY.substring(0, 4) + "****" : "missing"
+  });
+});
+
 // Middleware
 app.use(cors());
 app.use(express.static(path.join(__dirname, "public")));
@@ -21,6 +34,9 @@ app.use(express.static(path.join(__dirname, "public")));
 // 🔒 TMDB PROXY ROUTE
 // =====================
 app.use("/api/tmdb", async (req, res) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
   try {
     // req.path is the path relative to /api/tmdb (e.g. "/movie/popular")
     const tmdbPath = req.path.replace(/^\//, "");
@@ -34,9 +50,10 @@ app.use("/api/tmdb", async (req, res) => {
     queryParams.set("api_key", TMDB_KEY.trim());
 
     const tmdbUrl = `https://api.themoviedb.org/3/${tmdbPath}?${queryParams.toString()}`;
-    console.log(`📡 Fetching from TMDB: ${tmdbUrl}`);
+    console.log(`📡 Fetching: ${tmdbUrl}`);
 
-    const response = await fetch(tmdbUrl);
+    const response = await fetch(tmdbUrl, { signal: controller.signal });
+    clearTimeout(timeoutId);
 
     // Check if response is JSON before parsing
     const contentType = response.headers.get("content-type");
@@ -45,18 +62,23 @@ app.use("/api/tmdb", async (req, res) => {
       data = await response.json();
     } else {
       const text = await response.text();
-      console.warn(`⚠️ Non-JSON response from TMDB: ${text.substring(0, 200)}...`);
+      console.warn(`⚠️ Non-JSON response from TMDB: ${text.substring(0, 100)}...`);
       data = { 
         error: "Non-JSON response from TMDB", 
         status: response.status,
-        body: text.substring(0, 500) 
+        body: text.substring(0, 200) 
       };
     }
 
-    console.log(`✅ TMDB responded: ${response.status}`);
+    console.log(`✅ TMDB: ${response.status}`);
     res.status(response.status).json(data);
 
   } catch (err) {
+    clearTimeout(timeoutId);
+    if (err.name === "AbortError") {
+      console.error("❌ TMDB request timed out");
+      return res.status(504).json({ error: "TMDB Request Timeout" });
+    }
     console.error("❌ Proxy error:", err);
     res.status(500).json({ 
       error: "Internal Server Error during fetch", 

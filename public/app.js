@@ -1,11 +1,29 @@
-const BASE = "/api/tmdb";
+// Dynamically set BASE URL: if running locally on a different port (like Live Server 5500) or file://, point to Express proxy
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
+const BASE = (isLocal && window.location.port !== "3000") ? "http://localhost:3000/api/tmdb" : "/api/tmdb";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 let heroMovies = [];
 let heroIndex = 0;
 
+// HELPER: FETCH WITH RETRY
+async function fetchWithRetry(url, retries = 3, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return res;
+      
+      console.warn(`⚠️ Fetch attempt ${i + 1} failed with status ${res.status}. Retrying...`);
+    } catch (err) {
+      console.warn(`⚠️ Fetch attempt ${i + 1} threw error: ${err.message}. Retrying...`);
+    }
+    if (i < retries - 1) await new Promise(r => setTimeout(r, delay));
+  }
+  return fetch(url); // Final attempt without catching
+}
+
 // INIT
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
   const searchBtn = document.getElementById("searchBtn");
   const homeBtn = document.getElementById("homeBtn");
   const tvBtn = document.getElementById("tvBtn");
@@ -80,7 +98,7 @@ function loadTV() {
 async function fetchMovies(url, containerId) {
   try {
     console.log(`📡 Fetching movies from: ${url}`);
-    const res = await fetch(url);
+    const res = await fetchWithRetry(url);
     
     if (!res.ok) {
       console.error(`❌ API error (${res.status}): ${res.statusText}`);
@@ -128,7 +146,7 @@ async function fetchMovies(url, containerId) {
 async function fetchTV(url, containerId) {
   try {
     console.log(`📡 Fetching TV from: ${url}`);
-    const res = await fetch(url);
+    const res = await fetchWithRetry(url);
     
     if (!res.ok) {
       console.error(`❌ TV API error (${res.status}): ${res.statusText}`);
@@ -179,7 +197,7 @@ function openTV(id) {
 // ===============================
 async function loadHero() {
   try {
-    const res = await fetch(`${BASE}/trending/movie/week?include_adult=false`);
+    const res = await fetchWithRetry(`${BASE}/trending/movie/week?include_adult=false`);
     const data = await res.json();
 
     const slider = document.getElementById("heroSlider");

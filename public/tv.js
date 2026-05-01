@@ -1,4 +1,6 @@
-const BASE = "/api/tmdb";
+// Dynamically set BASE URL: if running locally on a different port (like Live Server 5500) or file://, point to Express proxy
+const isLocal = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1" || window.location.protocol === "file:";
+const BASE = (isLocal && window.location.port !== "3000") ? "http://localhost:3000/api/tmdb" : "/api/tmdb";
 const IMG = "https://image.tmdb.org/t/p/w500";
 
 const params = new URLSearchParams(window.location.search);
@@ -13,29 +15,50 @@ const LANGUAGES = [
   { code: "ml-IN", label: "Malayalam" }
 ];
 
+// HELPER: FETCH WITH RETRY
+async function fetchWithRetry(url, retries = 3, delay = 1000) {
+  for (let i = 0; i < retries; i++) {
+    try {
+      const res = await fetch(url);
+      if (res.ok) return res;
+      console.warn(`⚠️ Fetch attempt ${i + 1} failed for ${url}. Status: ${res.status}`);
+    } catch (err) {
+      console.warn(`⚠️ Fetch attempt ${i + 1} error for ${url}: ${err.message}`);
+    }
+    if (i < retries - 1) await new Promise(r => setTimeout(r, delay));
+  }
+  return fetch(url);
+}
+
 function goBack() {
   window.history.back();
 }
 
-// 🔥 WAIT FOR PAGE LOAD (IMPORTANT FIX)
+// 🔥 WAIT FOR PAGE LOAD
 window.addEventListener("DOMContentLoaded", loadTV);
 
 async function loadTV() {
   try {
-
     if (!tvId) {
-      alert("TV ID not found");
+      console.error("❌ TV ID not found");
       return;
     }
 
     // =====================
     // TV DETAILS
     // =====================
-    const res = await fetch(`${BASE}/tv/${tvId}`);
+    console.log(`📺 Loading TV details for ID: ${tvId}`);
+    const res = await fetchWithRetry(`${BASE}/tv/${tvId}`);
+    
+    if (!res.ok) {
+      console.error(`❌ TV Details error (${res.status}): ${res.statusText}`);
+      return;
+    }
+
     const data = await res.json();
 
-    document.getElementById("poster").src =
-      data.poster_path ? IMG + data.poster_path : "";
+    const posterEl = document.getElementById("poster");
+    if (posterEl) posterEl.src = data.poster_path ? IMG + data.poster_path : "";
 
     document.getElementById("title").innerText = data.name || "No Title";
     document.getElementById("rating").innerText = "⭐ " + (data.vote_average ? data.vote_average.toFixed(1) : "N/A");
@@ -60,134 +83,91 @@ async function loadTV() {
     }
 
     // =====================
-    // 🎬 TRAILER FIX
+    // 🎬 SMART MULTI-LANGUAGE TRAILER SYSTEM (TV)
     // =====================
-    const vidRes = await fetch(`${BASE}/tv/${tvId}/videos`);
-    const vidData = await vidRes.json();
 
-// =====================
-// 🎬 SMART MULTI-LANGUAGE TRAILER SYSTEM (TV)
-// =====================
+    const trailerFrame = document.getElementById("trailer");
+    const trailerSelect = document.getElementById("trailerSelect");
 
-const trailerFrame = document.getElementById("trailer");
-const trailerSelect = document.getElementById("trailerSelect");
+    const PRIORITY = ["Trailer", "Teaser", "Promo", "Featurette", "Clip"];
 
-const PRIORITY = ["Trailer", "Teaser", "Promo", "Featurette", "Clip"];
-
-let allVideos = [];
-
-// get priority weight
-function getPriority(type) {
-  const index = PRIORITY.indexOf(type);
-  return index === -1 ? 999 : index;
-}
-
-// fetch videos in multiple languages in parallel
-const videoPromises = LANGUAGES.map(async (lang) => {
-  try {
-    const res = await fetch(`${BASE}/tv/${tvId}/videos?language=${lang.code}`);
-    const data = await res.json();
-    
-    return (data.results || [])
-      .filter(v => v.site === "YouTube")
-      .map(v => ({
-        key: v.key,
-        name: v.name,
-        type: v.type,
-        lang: lang.label
-      }));
-  } catch (e) {
-    console.error(`Failed to fetch TV videos for ${lang.label}`, e);
-    return [];
-  }
-});
-
-const videoResults = await Promise.all(videoPromises);
-allVideos = videoResults.flat();
-
-// remove duplicates (same video across languages)
-const seen = new Set();
-allVideos = allVideos.filter(v => {
-  if (seen.has(v.key)) return false;
-  seen.add(v.key);
-  return true;
-});
-
-// sort by best type first (Trailer > Teaser > Promo ...)
-allVideos.sort((a, b) => {
-  return getPriority(a.type) - getPriority(b.type);
-});
-
-// render UI
-if (allVideos.length > 0) {
-
-  trailerSelect.innerHTML = "";
-
-  allVideos.forEach((v, i) => {
-
-    const opt = document.createElement("option");
-    opt.value = v.key;
-    opt.textContent = `${v.lang} - ${v.type} - ${v.name}`;
-
-    trailerSelect.appendChild(opt);
-
-    // load best trailer first
-    if (i === 0) {
-      trailerFrame.src = `https://www.youtube.com/embed/${v.key}?rel=0`;
+    function getPriority(type) {
+      const index = PRIORITY.indexOf(type);
+      return index === -1 ? 999 : index;
     }
-  });
 
-  // change trailer on select
-  trailerSelect.onchange = (e) => {
-    trailerFrame.src = `https://www.youtube.com/embed/${e.target.value}?rel=0`;
-  };
+    const videoPromises = LANGUAGES.map(async (lang) => {
+      try {
+        const res = await fetchWithRetry(`${BASE}/tv/${tvId}/videos?language=${lang.code}`);
+        const data = await res.json();
+        
+        return (data.results || [])
+          .filter(v => v.site === "YouTube")
+          .map(v => ({
+            key: v.key,
+            name: v.name,
+            type: v.type,
+            lang: lang.label
+          }));
+      } catch (e) {
+        console.error(`Failed to fetch TV videos for ${lang.label}`, e);
+        return [];
+      }
+    });
 
-} else {
+    const videoResults = await Promise.all(videoPromises);
+    let allVideos = videoResults.flat();
 
-  // fallback
-  trailerFrame.style.display = "none";
-  trailerSelect.style.display = "none";
+    const seen = new Set();
+    allVideos = allVideos.filter(v => {
+      if (seen.has(v.key)) return false;
+      seen.add(v.key);
+      return true;
+    });
 
-  const box = document.querySelector(".trailer-box");
+    allVideos.sort((a, b) => getPriority(a.type) - getPriority(b.type));
 
-  if (box) {
-    box.innerHTML += `
-      <p style="margin-top:10px; color:#ccc;">
-        No trailer available
-      </p>
-      <a href="https://www.youtube.com/results?search_query=${
-        encodeURIComponent(document.getElementById("title").innerText + " trailer")
-      }" target="_blank">
-        ▶ Watch on YouTube
-      </a>
-    `;
-  }
-}
+    if (allVideos.length > 0) {
+      if (trailerSelect) {
+        trailerSelect.innerHTML = "";
+        allVideos.forEach((v, i) => {
+          const opt = document.createElement("option");
+          opt.value = v.key;
+          opt.textContent = `${v.lang} - ${v.type} - ${v.name}`;
+          trailerSelect.appendChild(opt);
+
+          if (i === 0 && trailerFrame) {
+            trailerFrame.src = `https://www.youtube.com/embed/${v.key}?rel=0`;
+          }
+        });
+
+        trailerSelect.onchange = (e) => {
+          if (trailerFrame) trailerFrame.src = `https://www.youtube.com/embed/${e.target.value}?rel=0`;
+        };
+      }
+    }
 
     // =====================
     // 📺 SEASONS FIX
     // =====================
-    const container = document.getElementById("seasonList");
-    container.innerHTML = "";
-
-    data.seasons.forEach(season => {
-
-      if (!season.poster_path) return;
-
-      const div = document.createElement("div");
-      div.className = "movie";
-      div.onclick = () => loadSeason(season.season_number);
-
-      div.innerHTML = `
-        <img src="${IMG + season.poster_path}">
-        <p>${season.name}</p>
-      `;
-
-      container.appendChild(div);
-    });
+    const seasonListContainer = document.getElementById("seasonList");
+    if (seasonListContainer && data.seasons) {
+      seasonListContainer.innerHTML = "";
+      data.seasons.forEach(season => {
+        if (!season.poster_path) return;
+        const div = document.createElement("div");
+        div.className = "movie";
+        div.onclick = () => loadSeason(season.season_number);
+        div.innerHTML = `
+          <img src="${IMG + season.poster_path}">
+          <p>${season.name}</p>
+        `;
+        seasonListContainer.appendChild(div);
+      });
+    }
 
   } catch (err) {
-    console.error(err);
+    console.error("❌ TV Load Error:", err);
   }
 }
 
@@ -195,30 +175,28 @@ if (allVideos.length > 0) {
 // LOAD SEASON DETAILS
 // =====================
 async function loadSeason(seasonNumber) {
-
-  const res = await fetch(
-    `${BASE}/tv/${tvId}/season/${seasonNumber}`
-  );
-  const data = await res.json();
-
-  const box = document.getElementById("seasonDetails");
-
-  box.innerHTML = `
-    <div class="season-box">
-      <h2>${data.name}</h2>
-      <p>${data.overview || "No description available"}</p>
-
-      <h3>Episodes</h3>
-
-      <div class="episode-list">
-        ${data.episodes.map(ep => `
-          <div class="episode-item">
-            <b>Ep ${ep.episode_number}:</b> ${ep.name}
+  try {
+    const res = await fetchWithRetry(`${BASE}/tv/${tvId}/season/${seasonNumber}`);
+    const data = await res.json();
+    const box = document.getElementById("seasonDetails");
+    if (box) {
+      box.innerHTML = `
+        <div class="season-box">
+          <h2>${data.name}</h2>
+          <p>${data.overview || "No description available"}</p>
+          <h3>Episodes</h3>
+          <div class="episode-list">
+            ${data.episodes.map(ep => `
+              <div class="episode-item">
+                <b>Ep ${ep.episode_number}:</b> ${ep.name}
+              </div>
+            `).join("")}
           </div>
-        `).join("")}
-      </div>
-    </div>
-  `;
-
-  box.scrollIntoView({ behavior: "smooth" });
+        </div>
+      `;
+      box.scrollIntoView({ behavior: "smooth" });
+    }
+  } catch (err) {
+    console.error("❌ Season Load Error:", err);
+  }
 }
