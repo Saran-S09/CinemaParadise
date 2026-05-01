@@ -19,139 +19,149 @@ function goBack() {
 
 // LOAD MOVIE
 async function loadMovie() {
-
-  const res = await fetch(`${BASE}/movie/${movieId}`);
-  const data = await res.json();
-
-  document.getElementById("poster").src =
-    data.poster_path ? IMG + data.poster_path : "";
-
-  document.getElementById("title").innerText = data.title || "No Title";
-  document.getElementById("rating").innerText =
-    "⭐ " + (data.vote_average ? data.vote_average.toFixed(1) : "N/A");
-
-  document.getElementById("overview").innerText =
-    data.overview || "No description available.";
-
-  // GENRES
-  const genresEl = document.getElementById("genres");
-  if (genresEl && data.genres) {
-    genresEl.innerHTML = data.genres.map(g => `<span>${g.name}</span>`).join("");
-  }
-
-  // META ROW
-  const metaEl = document.getElementById("meta");
-  if (metaEl) {
-    const parts = [];
-    if (data.release_date) parts.push(`<span>📅 ${data.release_date.split("-")[0]}</span>`);
-    if (data.runtime) {
-      const hrs = Math.floor(data.runtime / 60);
-      const mins = data.runtime % 60;
-      parts.push(`<span>⏱ ${hrs}h ${mins}m</span>`);
+  try {
+    console.log(`🎬 Loading movie details for ID: ${movieId}`);
+    const res = await fetch(`${BASE}/movie/${movieId}`);
+    
+    if (!res.ok) {
+      console.error(`❌ Movie Details error (${res.status}): ${res.statusText}`);
+      return;
     }
-    if (data.original_language) parts.push(`<span>🌐 ${data.original_language.toUpperCase()}</span>`);
-    if (data.status) parts.push(`<span>● ${data.status}</span>`);
-    metaEl.innerHTML = parts.join("");
-  }
 
-  // CREDITS
-  const credRes = await fetch(`${BASE}/movie/${movieId}/credits`);
-  const credData = await credRes.json();
+    const data = await res.json();
 
-  const director = credData.crew.find(p => p.job === "Director");
-  const music = credData.crew.find(p => p.job === "Original Music Composer");
+    const posterEl = document.getElementById("poster");
+    if (posterEl) posterEl.src = data.poster_path ? IMG + data.poster_path : "";
 
-  document.getElementById("director").innerText =
-    director ? director.name : "N/A";
+    document.getElementById("title").innerText = data.title || "No Title";
+    document.getElementById("rating").innerText =
+      "⭐ " + (data.vote_average ? data.vote_average.toFixed(1) : "N/A");
 
-  document.getElementById("music").innerText =
-    music ? music.name : "N/A";
+    document.getElementById("overview").innerText =
+      data.overview || "No description available.";
 
-  // =====================
-  // 🎬 MULTI LANGUAGE TRAILERS
-  // =====================
-
-  const trailerFrame = document.getElementById("trailer");
-  const trailerSelect = document.getElementById("trailerSelect");
-  const trailerFallback = document.getElementById("trailerFallback");
-
-  let allVideos = [];
-
-  // fetch videos for each language in parallel
-  const videoPromises = LANGUAGES.map(async (lang) => {
-    try {
-      const res = await fetch(`${BASE}/movie/${movieId}/videos?language=${lang.code}`);
-      const data = await res.json();
-      
-      return (data.results || [])
-        .filter(v => v.site === "YouTube")
-        .map(v => ({
-          key: v.key,
-          name: v.name,
-          lang: lang.label
-        }));
-    } catch (e) {
-      console.error(`Failed to fetch videos for ${lang.label}`, e);
-      return [];
+    // GENRES
+    const genresEl = document.getElementById("genres");
+    if (genresEl && data.genres) {
+      genresEl.innerHTML = data.genres.map(g => `<span>${g.name}</span>`).join("");
     }
-  });
 
-  const videoResults = await Promise.all(videoPromises);
-  allVideos = videoResults.flat();
+    // META ROW
+    const metaEl = document.getElementById("meta");
+    if (metaEl) {
+      const parts = [];
+      if (data.release_date) parts.push(`<span>📅 ${data.release_date.split("-")[0]}</span>`);
+      if (data.runtime) {
+        const hrs = Math.floor(data.runtime / 60);
+        const mins = data.runtime % 60;
+        parts.push(`<span>⏱ ${hrs}h ${mins}m</span>`);
+      }
+      if (data.original_language) parts.push(`<span>🌐 ${data.original_language.toUpperCase()}</span>`);
+      if (data.status) parts.push(`<span>● ${data.status}</span>`);
+      metaEl.innerHTML = parts.join("");
+    }
 
-  // remove duplicates
-  const seen = new Set();
-  allVideos = allVideos.filter(v => {
-    if (seen.has(v.key)) return false;
-    seen.add(v.key);
-    return true;
-  });
+    // CREDITS
+    const credRes = await fetch(`${BASE}/movie/${movieId}/credits`);
+    const credData = await credRes.json();
 
-  // render dropdown
-  if (allVideos.length > 0) {
+    const director = credData.crew.find(p => p.job === "Director");
+    const music = credData.crew.find(p => p.job === "Original Music Composer");
 
-    trailerSelect.innerHTML = "";
+    document.getElementById("director").innerText =
+      director ? director.name : "N/A";
 
-    allVideos.forEach((v, i) => {
+    document.getElementById("music").innerText =
+      music ? music.name : "N/A";
 
-      const opt = document.createElement("option");
-      opt.value = v.key;
-      opt.textContent = `${v.lang} - ${v.name}`;
+    // =====================
+    // 🎬 MULTI LANGUAGE TRAILERS
+    // =====================
 
-      trailerSelect.appendChild(opt);
+    const trailerFrame = document.getElementById("trailer");
+    const trailerSelect = document.getElementById("trailerSelect");
+    const trailerFallback = document.getElementById("trailerFallback");
 
-      // first video load
-      if (i === 0) {
-        trailerFrame.src =
-          `https://www.youtube.com/embed/${v.key}?rel=0`;
+    let allVideos = [];
+
+    // fetch videos for each language in parallel
+    const videoPromises = LANGUAGES.map(async (lang) => {
+      try {
+        const res = await fetch(`${BASE}/movie/${movieId}/videos?language=${lang.code}`);
+        const data = await res.json();
+        
+        return (data.results || [])
+          .filter(v => v.site === "YouTube")
+          .map(v => ({
+            key: v.key,
+            name: v.name,
+            lang: lang.label
+          }));
+      } catch (e) {
+        console.error(`Failed to fetch videos for ${lang.label}`, e);
+        return [];
       }
     });
 
-    // change video
-    trailerSelect.onchange = (e) => {
-      trailerFrame.src =
-        `https://www.youtube.com/embed/${e.target.value}?rel=0`;
-    };
+    const videoResults = await Promise.all(videoPromises);
+    allVideos = videoResults.flat();
 
-  } else {
+    // remove duplicates
+    const seen = new Set();
+    allVideos = allVideos.filter(v => {
+      if (seen.has(v.key)) return false;
+      seen.add(v.key);
+      return true;
+    });
 
-    trailerFrame.style.display = "none";
-    trailerSelect.style.display = "none";
+    // render dropdown
+    if (allVideos.length > 0) {
+      if (trailerSelect) {
+        trailerSelect.innerHTML = "";
+        allVideos.forEach((v, i) => {
+          const opt = document.createElement("option");
+          opt.value = v.key;
+          opt.textContent = `${v.lang} - ${v.name}`;
+          trailerSelect.appendChild(opt);
 
-    if (trailerFallback) {
-      const movieTitle = document.getElementById("title").innerText;
-      trailerFallback.innerHTML = `
-        <div class="no-trailer-box">
-          <p>😔 No trailer available for this movie</p>
-          <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(
-            movieTitle + " trailer"
-          )}" target="_blank" class="yt-link-btn">
-            ▶ Search on YouTube
-          </a>
-        </div>
-      `;
+          // first video load
+          if (i === 0 && trailerFrame) {
+            trailerFrame.src = `https://www.youtube.com/embed/${v.key}?rel=0`;
+          }
+        });
+
+        // change video
+        trailerSelect.onchange = (e) => {
+          if (trailerFrame) trailerFrame.src = `https://www.youtube.com/embed/${e.target.value}?rel=0`;
+        };
+      }
+    } else {
+      if (trailerFrame) trailerFrame.style.display = "none";
+      if (trailerSelect) trailerSelect.style.display = "none";
+
+      if (trailerFallback) {
+        const movieTitle = document.getElementById("title").innerText;
+        trailerFallback.innerHTML = `
+          <div class="no-trailer-box">
+            <p>😔 No trailer available for this movie</p>
+            <a href="https://www.youtube.com/results?search_query=${encodeURIComponent(
+              movieTitle + " trailer"
+            )}" target="_blank" class="yt-link-btn">
+              ▶ Search on YouTube
+            </a>
+          </div>
+        `;
+      }
     }
+  } catch (err) {
+    console.error("❌ Movie Details Load Error:", err);
   }
 }
 
-loadMovie();
+document.addEventListener("DOMContentLoaded", () => {
+  if (movieId) {
+    loadMovie();
+  } else {
+    console.warn("⚠️ No Movie ID found in URL");
+  }
+});

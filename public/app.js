@@ -5,28 +5,33 @@ let heroMovies = [];
 let heroIndex = 0;
 
 // INIT
-document.getElementById("searchBtn").onclick = searchMovies;
-document.getElementById("homeBtn").onclick = showHome;
-document.getElementById("tvBtn").onclick = showTV;
+document.addEventListener("DOMContentLoaded", () => {
+  const searchBtn = document.getElementById("searchBtn");
+  const homeBtn = document.getElementById("homeBtn");
+  const tvBtn = document.getElementById("tvBtn");
 
-loadHome();
-// CHECK WHERE TO OPEN
-window.onload = () => {
+  if (searchBtn) searchBtn.onclick = searchMovies;
+  if (homeBtn) homeBtn.onclick = showHome;
+  if (tvBtn) tvBtn.onclick = showTV;
+
+  // CHECK WHERE TO OPEN
   const params = new URLSearchParams(window.location.search);
   const page = params.get("page");
 
   if (page === "tv") {
     showTV();
   } else {
-    showHome();
+    loadHome();
   }
-};
+});
 
 // ===============================
 // HOME
 // ===============================
 function loadHome() {
   showHome();
+  
+  console.log("🚀 Loading Home data...");
 
   
   fetchMovies(`${BASE}/trending/movie/week`, "trending");
@@ -74,14 +79,26 @@ function loadTV() {
 // ===============================
 async function fetchMovies(url, containerId) {
   try {
+    console.log(`📡 Fetching movies from: ${url}`);
     const res = await fetch(url);
+    
+    if (!res.ok) {
+      console.error(`❌ API error (${res.status}): ${res.statusText}`);
+      const errData = await res.json().catch(() => ({}));
+      console.error("Error details:", errData);
+      return;
+    }
+
     const data = await res.json();
 
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+      console.warn(`⚠️ Container #${containerId} not found`);
+      return;
+    }
 
-    if (!data.results) {
-      console.warn(`No results for ${url}`, data);
+    if (!data.results || data.results.length === 0) {
+      console.warn(`Empty results for ${url}`, data);
       container.innerHTML = "<p class='no-results'>No movies found.</p>";
       return;
     }
@@ -100,7 +117,7 @@ async function fetchMovies(url, containerId) {
     });
 
   } catch (err) {
-    console.error("Fetch error:", err);
+    console.error("❌ Fetch error:", err);
   }
 }
 
@@ -110,14 +127,26 @@ async function fetchMovies(url, containerId) {
 // ===============================
 async function fetchTV(url, containerId) {
   try {
+    console.log(`📡 Fetching TV from: ${url}`);
     const res = await fetch(url);
+    
+    if (!res.ok) {
+      console.error(`❌ TV API error (${res.status}): ${res.statusText}`);
+      const errData = await res.json().catch(() => ({}));
+      console.error("Error details:", errData);
+      return;
+    }
+
     const data = await res.json();
 
     const container = document.getElementById(containerId);
-    if (!container) return;
+    if (!container) {
+      console.warn(`⚠️ Container #${containerId} not found`);
+      return;
+    }
 
-    if (!data.results) {
-      console.warn(`No results for ${url}`, data);
+    if (!data.results || data.results.length === 0) {
+      console.warn(`Empty results for ${url}`, data);
       container.innerHTML = "<p class='no-results'>No TV shows found.</p>";
       return;
     }
@@ -136,7 +165,7 @@ async function fetchTV(url, containerId) {
     });
 
   } catch (err) {
-    console.error("TV fetch error:", err);
+    console.error("❌ TV fetch error:", err);
   }
 }
 

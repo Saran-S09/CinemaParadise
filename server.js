@@ -22,35 +22,46 @@ app.use(express.static(path.join(__dirname, "public")));
 // =====================
 app.use("/api/tmdb", async (req, res) => {
   try {
-    // In app.use, req.url is the relative path (e.g. /movie/popular)
-    const tmdbPath = req.url.split("?")[0].replace(/^\//, "");
+    // req.path is the path relative to /api/tmdb (e.g. "/movie/popular")
+    const tmdbPath = req.path.replace(/^\//, "");
 
     if (!tmdbPath) {
-      return res.status(400).json({ error: "No path provided" });
+      return res.status(400).json({ error: "No TMDB path provided" });
     }
 
-    // Build query string (forward all params + inject API key)
+    // Build query string (forward all incoming params + inject API key)
     const queryParams = new URLSearchParams(req.query);
-    queryParams.set("api_key", TMDB_KEY);
+    queryParams.set("api_key", TMDB_KEY.trim());
 
     const tmdbUrl = `https://api.themoviedb.org/3/${tmdbPath}?${queryParams.toString()}`;
-    console.log(`📡 Proxying: ${tmdbUrl}`);
+    console.log(`📡 Fetching from TMDB: ${tmdbUrl}`);
 
-    const response = await fetch(tmdbUrl, {
-      headers: {
-        "User-Agent": "FilmRoll/1.0",
-        "Accept": "application/json"
-      }
-    });
+    const response = await fetch(tmdbUrl);
 
-    const data = await response.json();
+    // Check if response is JSON before parsing
+    const contentType = response.headers.get("content-type");
+    let data;
+    if (contentType && contentType.includes("application/json")) {
+      data = await response.json();
+    } else {
+      const text = await response.text();
+      console.warn(`⚠️ Non-JSON response from TMDB: ${text.substring(0, 200)}...`);
+      data = { 
+        error: "Non-JSON response from TMDB", 
+        status: response.status,
+        body: text.substring(0, 500) 
+      };
+    }
 
-    // Forward the actual status code from TMDB (e.g. 404, 401)
+    console.log(`✅ TMDB responded: ${response.status}`);
     res.status(response.status).json(data);
 
   } catch (err) {
-    console.error("❌ Proxy error:", err.message);
-    res.status(500).json({ error: "Internal Server Error during fetch" });
+    console.error("❌ Proxy error:", err);
+    res.status(500).json({ 
+      error: "Internal Server Error during fetch", 
+      message: err.message 
+    });
   }
 });
 
