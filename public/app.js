@@ -50,31 +50,7 @@ function loadHome() {
   loadHero();
 }
 
-async function fetchTV(url, containerId) {
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-
-    const container = document.getElementById(containerId);
-    if (!container) return;
-
-    container.innerHTML = "";
-
-    data.results.forEach(tv => {
-      if (!tv.poster_path) return;
-
-      container.innerHTML += `
-        <div class="movie" onclick="openTV(${tv.id})">
-          <img src="${IMG + tv.poster_path}">
-          <p>${tv.name}</p>
-        </div>
-      `;
-    });
-
-  } catch (err) {
-    console.error("TV Fetch error:", err);
-  }
-}
+// (Old fetchTV removed to avoid duplication)
 
 // ===============================
 // TV SECTION
@@ -104,6 +80,12 @@ async function fetchMovies(url, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    if (!data.results) {
+      console.warn(`No results for ${url}`, data);
+      container.innerHTML = "<p class='no-results'>No movies found.</p>";
+      return;
+    }
+
     container.innerHTML = "";
 
     data.results.forEach(m => {
@@ -111,7 +93,7 @@ async function fetchMovies(url, containerId) {
 
       container.innerHTML += `
         <div class="movie" onclick="openMovie(${m.id})">
-          <img src="${IMG + m.poster_path}">
+          <img src="${IMG + m.poster_path}" alt="${m.title}">
           <p>${m.title}</p>
         </div>
       `;
@@ -134,6 +116,12 @@ async function fetchTV(url, containerId) {
     const container = document.getElementById(containerId);
     if (!container) return;
 
+    if (!data.results) {
+      console.warn(`No results for ${url}`, data);
+      container.innerHTML = "<p class='no-results'>No TV shows found.</p>";
+      return;
+    }
+
     container.innerHTML = "";
 
     data.results.forEach(tv => {
@@ -141,7 +129,7 @@ async function fetchTV(url, containerId) {
 
       container.innerHTML += `
         <div class="movie" onclick="openTV(${tv.id})">
-          <img src="${IMG + tv.poster_path}">
+          <img src="${IMG + tv.poster_path}" alt="${tv.name}">
           <p>${tv.name}</p>
         </div>
       `;

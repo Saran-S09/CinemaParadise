@@ -82,26 +82,28 @@ function getPriority(type) {
   return index === -1 ? 999 : index;
 }
 
-// fetch videos in multiple languages
-for (let lang of LANGUAGES) {
+// fetch videos in multiple languages in parallel
+const videoPromises = LANGUAGES.map(async (lang) => {
+  try {
+    const res = await fetch(`${BASE}/tv/${tvId}/videos?language=${lang.code}`);
+    const data = await res.json();
+    
+    return (data.results || [])
+      .filter(v => v.site === "YouTube")
+      .map(v => ({
+        key: v.key,
+        name: v.name,
+        type: v.type,
+        lang: lang.label
+      }));
+  } catch (e) {
+    console.error(`Failed to fetch TV videos for ${lang.label}`, e);
+    return [];
+  }
+});
 
-  const res = await fetch(
-    `${BASE}/tv/${tvId}/videos?language=${lang.code}`
-  );
-
-  const data = await res.json();
-
-  const videos = data.results
-    .filter(v => v.site === "YouTube")
-    .map(v => ({
-      key: v.key,
-      name: v.name,
-      type: v.type,
-      lang: lang.label
-    }));
-
-  allVideos.push(...videos);
-}
+const videoResults = await Promise.all(videoPromises);
+allVideos = videoResults.flat();
 
 // remove duplicates (same video across languages)
 const seen = new Set();

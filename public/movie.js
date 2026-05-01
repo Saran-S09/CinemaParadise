@@ -77,25 +77,27 @@ async function loadMovie() {
 
   let allVideos = [];
 
-  // fetch videos for each language
-  for (let lang of LANGUAGES) {
+  // fetch videos for each language in parallel
+  const videoPromises = LANGUAGES.map(async (lang) => {
+    try {
+      const res = await fetch(`${BASE}/movie/${movieId}/videos?language=${lang.code}`);
+      const data = await res.json();
+      
+      return (data.results || [])
+        .filter(v => v.site === "YouTube")
+        .map(v => ({
+          key: v.key,
+          name: v.name,
+          lang: lang.label
+        }));
+    } catch (e) {
+      console.error(`Failed to fetch videos for ${lang.label}`, e);
+      return [];
+    }
+  });
 
-    const res = await fetch(
-      `${BASE}/movie/${movieId}/videos?language=${lang.code}`
-    );
-
-    const data = await res.json();
-
-    const videos = data.results
-      .filter(v => v.site === "YouTube")
-      .map(v => ({
-        key: v.key,
-        name: v.name,
-        lang: lang.label
-      }));
-
-    allVideos.push(...videos);
-  }
+  const videoResults = await Promise.all(videoPromises);
+  allVideos = videoResults.flat();
 
   // remove duplicates
   const seen = new Set();

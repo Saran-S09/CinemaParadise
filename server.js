@@ -20,26 +20,37 @@ app.use(express.static(path.join(__dirname, "public")));
 // =====================
 // 🔒 TMDB PROXY ROUTE
 // =====================
-app.get("/api/tmdb/*path", async (req, res) => {
+app.use("/api/tmdb", async (req, res) => {
   try {
-    // Extract the TMDB path from originalUrl to preserve slashes
-    const tmdbPath = req.originalUrl.split("?")[0].replace("/api/tmdb/", "");
+    // In app.use, req.url is the relative path (e.g. /movie/popular)
+    const tmdbPath = req.url.split("?")[0].replace(/^\//, "");
+
+    if (!tmdbPath) {
+      return res.status(400).json({ error: "No path provided" });
+    }
 
     // Build query string (forward all params + inject API key)
     const queryParams = new URLSearchParams(req.query);
     queryParams.set("api_key", TMDB_KEY);
 
     const tmdbUrl = `https://api.themoviedb.org/3/${tmdbPath}?${queryParams.toString()}`;
-    console.log(`Proxying request to: ${tmdbUrl}`);
+    console.log(`📡 Proxying: ${tmdbUrl}`);
 
-    const response = await fetch(tmdbUrl);
+    const response = await fetch(tmdbUrl, {
+      headers: {
+        "User-Agent": "FilmRoll/1.0",
+        "Accept": "application/json"
+      }
+    });
+
     const data = await response.json();
 
-    res.json(data);
+    // Forward the actual status code from TMDB (e.g. 404, 401)
+    res.status(response.status).json(data);
 
   } catch (err) {
-    console.error("Proxy error:", err.message);
-    res.status(500).json({ error: "Failed to fetch from TMDB" });
+    console.error("❌ Proxy error:", err.message);
+    res.status(500).json({ error: "Internal Server Error during fetch" });
   }
 });
 
